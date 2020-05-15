@@ -1,6 +1,7 @@
 import React from 'react';
 import CurrencyFormat from 'react-currency-format';
-
+import Table from 'react-bootstrap/Table';
+import '../App.scss';
 class LoanAmortization extends React.Component {
   renderTableRows(array) {
     /**
@@ -29,7 +30,7 @@ class LoanAmortization extends React.Component {
 
     return (
       <div className={`loan-table-container component ${hiddenClass}`}>
-        <table className="table table-condensced table-bordered">
+        <Table striped bordered hover size="sm">
           <thead>
             <tr>
               <th className="month column"></th>
@@ -42,7 +43,7 @@ class LoanAmortization extends React.Component {
           <tbody>
             {this.renderTableRows(amortizationArray)}
           </tbody>
-        </table>
+        </Table>
       </div>
     )
   }
