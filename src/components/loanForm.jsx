@@ -1,11 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import CurrencyFormat from 'react-currency-format';
 import LoanDuration from './loanDuration';
 
-class LoanForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
+const LoanForm = props => {
+    const [state,setState] = useState({
       price: "",
       duration: "",
       interestRate: "",
@@ -14,40 +12,38 @@ class LoanForm extends React.Component {
       flexiPayRepayment: "",
       isError: false,
       durationKey : Math.random()
-    };
+    });
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleReset = this.handleReset.bind(this);
-  }
+  useEffect(() => {
+      props.toggleFlexiPayCallback(state.flexiPayOption)
+    }, [state.flexiPayOption]);
 
-  sendParentFormValues() {
+  const sendParentFormValues = () => {
     /**
     * Sends state values to Parent Callback function
     * @return {function} parentCallback()
     */
-    this.props.parentCallback(this.state)
+    props.parentCallback(state)
   }
 
-  handleReset(){
-    this.setState(
-      {
-        price: "",
-        duration: "",
-        interestRate: "",
-        flexiPayOption: false,
-        flexiPayDuration: "",
-        flexiPayRepayment: "",
-        isError: false,
-        durationKey : Math.random(),
-      }, function() {
-        this.props.resetCallback(this.state);
-      }
-    );
+  const handleReset = () =>{
+    props.resetCallback();
 
-    
-  }
-  handleChange(event) {
+    setState({
+      price: "",
+      duration: "",
+      interestRate: "",
+      flexiPayOption: false,
+      flexiPayDuration: "",
+      flexiPayRepayment: "",
+      isError: false,
+      durationKey : Math.random()
+    });
+
+
+  };
+
+  const handleChange = (event) => {
     /**
     * Handles form input field event changes
     * @param {obj} event 
@@ -57,51 +53,54 @@ class LoanForm extends React.Component {
     const value = target.value;
     const name = target.name;
 
-    this.setState({
+    setState(
+      {...state,
       [name]: value
     });
   }
 
-  checkFormValues() {
+  const checkFormValues = () => {
     /**
     * Checks if form field inputs are valid (empty or below a certain number)
     * @return {bool}
     */
   if (   
-      this.state.price === "" || 
-      this.state.duration === "" ||
-      this.state.interestRate === "" ||
-      this.state.duration < 1 ||
-      (this.state.flexiPayOption === true  && (this.state.flexiPayRepayment === "" || this.state.flexiPayDuration === "")  ) ||
-      this.state.interestRate < 0.01
+      state.price === "" || 
+      state.duration === "" ||
+      state.interestRate === "" ||
+      state.duration < 1 ||
+      (state.flexiPayOption === true  && (state.flexiPayRepayment === "" || state.flexiPayDuration === "")  ) ||
+      state.interestRate < 0.01
      ) {
       return true;
     } else {
       return false;
     }
-  }
+  };
 
-  triggerErrorMsg() {
+  const triggerErrorMsg = () => {
     /**
     * Sets the error message in state to true
     * @return {function} setState()
     */
-    this.setState({
+    setState({
+      ...state,
       isError: true
     })
-  }
+  };
 
-  hideErrorMsg() {
+  const hideErrorMsg = () =>{
     /**
     * Sets the error message in state to false
     * @return {function} setState()
     */
-    this.setState({
+    setState({
+      ...state,
       isError: false
     })
-  }
+  };
 
-  handleSubmit(event) {
+  const handleSubmit = (event) => {
     /**
     * Handles the submit btn in the form fields
     * @param {obj} event 
@@ -110,47 +109,48 @@ class LoanForm extends React.Component {
     * @return {function} sendParentFormValues()
     */
     event.preventDefault();
-    const isError = this.checkFormValues();
+    const isError = checkFormValues();
 
     if (isError) {
-      this.triggerErrorMsg();
+      triggerErrorMsg();
     } else {
-      this.hideErrorMsg();
-      this.sendParentFormValues();
+      hideErrorMsg();
+      sendParentFormValues();
     } 
-  }
+  };
 
-  formCallback = (durationInMonths) => {
-    this.setState({
+  const formCallback = (durationInMonths) => {
+    setState({
+      ...state,
       duration: durationInMonths
      });
   }
 
-  formFlexiPayCallback = (durationInMonths) => {
-    this.setState({
+  const formFlexiPayCallback = (durationInMonths) => {
+    setState({
+      ...state,
       flexiPayDuration: durationInMonths
      });
   }
 
-  toggleChange = () => {
-    this.setState({
-      flexiPayOption: !this.state.flexiPayOption,
-    }, function(){
-      this.props.toggleFlexiPayCallback(this.state.flexiPayOption);
+  const toggleChange = () => {
+    setState({
+      ...state,
+      flexiPayOption: !state.flexiPayOption,
     });
   }
-  render() {
-    const isError = this.state.isError ? "show-fast" : "hide-fast";
+
+    const isError = state.isError ? "show-fast" : "hide-fast";
 
     return (
       <div className="loan-form-container component">
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <div className="input-container ">
             <label htmlFor="price">Balance</label>
             <div className="form-container price">
-              <CurrencyFormat value={this.state.price} thousandSeparator={true} prefix={'$'} onValueChange={(values) => {
+              <CurrencyFormat value={state.price} thousandSeparator={true} prefix={'$'} onValueChange={(values) => {
                   const {formattedValue, value} = values;
-                  this.setState({price: value})
+                  setState({...state,price: value})
               }}/>
               </div>
           </div>
@@ -163,12 +163,12 @@ class LoanForm extends React.Component {
               step="any"
               min="0"
               max="1000" 
-              value={this.state.interestRate} 
-              onChange={this.handleChange}/>
+              value={state.interestRate} 
+              onChange={handleChange}/>
               <div className="symbol">%</div>
             </div>
           </div>
-          <LoanDuration key={this.state.durationKey} parentCallback={this.formCallback}/>
+          <LoanDuration key={state.durationKey} parentCallback={formCallback}/>
           <div className="input-container">
             <label htmlFor="flexiPayOption">Flexible Repayment</label>
             <div className="form-container flexiPayOption">
@@ -176,42 +176,41 @@ class LoanForm extends React.Component {
               <input 
                 name="flexiPayOption" 
                 type="checkbox"
-                checked={this.state.flexiPayOption}
-                onChange={this.toggleChange}/>
+                checked={state.flexiPayOption}
+                onChange={toggleChange}/>
               <div className="slider round"></div>
               </label>
             </div>
           </div>
           {
-            this.state.flexiPayOption
+            state.flexiPayOption
             ?
             <div>
               <div className="input-container" >
               <label htmlFor="flexiPayRepayment">Flex Repayment</label>
               <div className="form-container price">
-                <CurrencyFormat value={this.state.flexiPayRepayment} thousandSeparator={true} prefix={'$'} onValueChange={(values) => {
+                <CurrencyFormat value={state.flexiPayRepayment} thousandSeparator={true} prefix={'$'} onValueChange={(values) => {
                     const {formattedValue, value} = values;
-                    this.setState({flexiPayRepayment: value})
+                    setState({...state,flexiPayRepayment: value})
                 }}/>
               </div>
             </div>
-            <LoanDuration key={this.state.durationKey} parentCallback={this.formFlexiPayCallback}/></div>
+            <LoanDuration key={state.durationKey} parentCallback={formFlexiPayCallback}/></div>
             : null
           }
           
           <div className="input-container submit-button">
             <input type="submit" value="Calculate Loan" />
-            <input type="button" value="Reset" onClick={this.handleReset} />
+            <input type="button" value="Reset" onClick={handleReset} />
             <div className={`error-msg-container ${isError}`}>
               <p>Please make sure you have non-empty, valid numbers in your form fields.</p>
             </div>
           </div>
         </form>
 
-        
       </div>
     )
-  }
+
 }
 
 export default LoanForm;

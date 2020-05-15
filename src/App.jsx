@@ -2,9 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import LoanCalculator from './components/loanCalculator'; 
 
-
 const rootEl = document.getElementById('root');
-
 
 const App = () => {
     return (
@@ -21,7 +19,6 @@ const renderApp = () => {
 }
 
 renderApp();
-
 
 // This checks for local changes and automatically refreshes the browser (hot-reloading)
 if (module.hot) {

@@ -2,6 +2,7 @@ import React from 'react';
 import CurrencyFormat from 'react-currency-format';
 import Table from 'react-bootstrap/Table';
 import '../App.scss';
+
 class LoanAmortization extends React.Component {
   renderTableRows(array) {
     /**
