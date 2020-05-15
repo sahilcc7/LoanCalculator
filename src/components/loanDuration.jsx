@@ -1,86 +1,70 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
-class LoanDuration extends React.Component {
-    constructor(props) {
-        super(props);
+const LoanDuration = (props) => {
+    const [durationYears,setDurationYears] = useState("");
+    const [durationMonths,setDurationMonths] = useState("");
+    const [totalMonths,setTotalMonths] = useState("");
 
-        this.state = {
-            durationYears : "",
-            durationMonths : "",
-            duration: ""
-        };
-
-        this.handleChangeMonth = this.handleChangeMonth.bind(this);
-        this.handleChangeYears = this.handleChangeYears.bind(this);
-    }
-
-    handleChangeYears(event) {
+    useEffect(()=>{
+        props.parentCallback(totalMonths);
+    },[totalMonths]);
+    
+    const handleChangeYears = (event) => {
         let months = 0;
 
-        if (event.target.value !== "")
-        {
+        if (event.target.value !== "") {
             months = parseFloat(event.target.value) * 12;
         }
 
-        if (this.state.durationMonths !== "")
-        {
-            months += parseFloat(this.state.durationMonths);
+        if (durationMonths !== "") {
+            months += parseFloat(durationMonths);
         }
 
-        this.setState({
-            durationYears : event.target.value
-        }, ()=> {
-            this.props.parentCallback(months); 
-        });
-      }
+        setDurationYears(event.target.value);
+        setTotalMonths(months);
+    };
 
-      
-    handleChangeMonth(event) {
+
+    const handleChangeMonth = (event) => {
         let months = 0;
 
-        if (event.target.value !== "")
-        {
+        if (event.target.value !== "") {
             months = parseFloat(event.target.value);
         }
 
-        if (this.state.durationYears !== "")
-        {
-            months += parseFloat(this.state.durationYears) * 12;
+        if (this.state.durationYears !== "") {
+            months += parseFloat(durationYears) * 12;
         }
 
-        this.setState({
-            durationMonths : event.target.value
-        }, () => {
-            this.props.parentCallback(months); 
-        });
-      }
- 
-      render() {
-          return (
-            <>
-                <div className="input-container">
-                    <label htmlFor="durationYears">Years</label>
-                    <div className="form-container duration">
-                        <input 
-                        name="durationYears" 
-                        type="number"
-                        value={this.state.durationYears}
-                        onChange={this.handleChangeYears}/>
-                    </div>
-                </div>
+        setDurationMonths(event.target.value);
+        setTotalMonths(months);
+    };
 
-                <div className="input-container">
-                    <label htmlFor="durationMonths">Months</label>
-                    <div className="form-container duration">
-                        <input 
-                        name="durationMonths" 
+    return (
+        <>
+            <div className="input-container">
+                <label htmlFor="durationYears">Years</label>
+                <div className="form-container duration">
+                    <input
+                        name="durationYears"
                         type="number"
-                        value={this.state.durationMonths}
-                        onChange={this.handleChangeMonth}/>
-                    </div>
+                        value={durationYears}
+                        onChange={handleChangeYears} />
                 </div>
-            </>
-          )
-      }
+            </div>
+
+            <div className="input-container">
+                <label htmlFor="durationMonths">Months</label>
+                <div className="form-container duration">
+                    <input
+                        name="durationMonths"
+                        type="number"
+                        value={durationMonths}
+                        onChange={handleChangeMonth} />
+                </div>
+            </div>
+        </>
+    )
+
 }
 export default LoanDuration;
