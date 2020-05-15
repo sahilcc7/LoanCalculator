@@ -1,7 +1,7 @@
 import React from 'react';
 import CurrencyFormat from 'react-currency-format';
 
-function FlexLoanResults(props) {
+const FlexLoanResults = (props) => {
 
   return (
       <div className="loan-results-container component">

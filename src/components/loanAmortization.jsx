@@ -3,8 +3,8 @@ import CurrencyFormat from 'react-currency-format';
 import Table from 'react-bootstrap/Table';
 import '../App.scss';
 
-class LoanAmortization extends React.Component {
-  renderTableRows(array) {
+const LoanAmortization = (props) => {
+  const renderTableRows = (array) => {
     /**
     * Render Loam Amortization Table rows
     * @param {array} array 
@@ -25,9 +25,8 @@ class LoanAmortization extends React.Component {
     });
   }
 
-  render() {
-    const hiddenClass = this.props.table.isHidden ? "hide" : "show";
-    const amortizationArray = this.props.table.resultsArray;
+    const hiddenClass = props.table.isHidden ? "hide" : "show";
+    const amortizationArray = props.table.resultsArray;
 
     return (
       <div className={`loan-table-container component ${hiddenClass}`}>
@@ -42,12 +41,12 @@ class LoanAmortization extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {this.renderTableRows(amortizationArray)}
+            {renderTableRows(amortizationArray)}
           </tbody>
         </Table>
       </div>
-    )
-  }
+    );
+
 }
 
 export default LoanAmortization;
