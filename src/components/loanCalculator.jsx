@@ -3,8 +3,11 @@ import LoanForm from './loanForm';
 import LoanResults from './loanResults';
 import FlexLoanResults from './flexLoanResults';
 import LoanAmortization from './loanAmortization';
+import { Container } from 'react-bootstrap';
 
 const LoanCalculator = props => {
+  const [formKey, setFormKey] = useState(Math.random);
+
   const [formValue, setFormValues] = useState({
     price: "",
     duration: "",
@@ -57,29 +60,31 @@ const LoanCalculator = props => {
   };
 
   const resetState = () => {
-    setFormValues({
-      price: "",
-      duration: "",
-      interestRate: "",
-      flexiPayRepayment: "",
-      flexiPayDuration: ""
-    });
+         setFormValues({
+          price: "",
+          duration: "",
+          interestRate: "",
+          flexiPayRepayment: "",
+          flexiPayDuration: ""
+        });
+    
+        setResults({
+          totalPrincipal: "0",
+          totalLoanAmt: "0",
+          monthlyPayment: "0",
+          totalInterest: "0",
+          balance: "0"
+        });
+    
+        setAmortization({
+          resultsArray: [],
+          totalInterestPaid: "",
+          isHidden: true
+        });
+    
+        setFlexiOption(false); 
 
-    setResults({
-      totalPrincipal: "0",
-      totalLoanAmt: "0",
-      monthlyPayment: "0",
-      totalInterest: "0",
-      balance: "0"
-    });
-
-    setAmortization({
-      resultsArray: [],
-      totalInterestPaid: "",
-      isHidden: true
-    });
-
-    setFlexiOption(false);
+    setFormKey(Math.random);
   };
 
   const getSum = (array, prop) => {
@@ -357,9 +362,21 @@ const LoanCalculator = props => {
 
   return (
     <div>
-      <LoanForm parentCallback={formCallback} toggleFlexiPayCallback={toggleFlexiPayCallback} resetCallback={resetState.bind(this)} />
-      {flexiOption ? <FlexLoanResults results={flexResults} /> : <LoanResults results={results} />}
-      <LoanAmortization table={amortization} />
+      <Container key={formKey}>
+        <LoanForm
+          parentCallback={formCallback}
+          toggleFlexiPayCallback={toggleFlexiPayCallback}
+          resetCallback={resetState.bind(this)} />
+
+        {
+          flexiOption ?
+            <FlexLoanResults results={flexResults} />
+            :
+            <LoanResults results={results} />
+        }
+
+        <LoanAmortization table={amortization} />
+      </Container>
     </div>
   );
 

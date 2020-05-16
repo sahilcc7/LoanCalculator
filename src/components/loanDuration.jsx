@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Form from 'react-bootstrap/Form'
+import { Form, Row } from 'react-bootstrap'
 
 const LoanDuration = (props) => {
     const [durationYears, setDurationYears] = useState("");
@@ -33,7 +33,7 @@ const LoanDuration = (props) => {
             months = parseFloat(event.target.value);
         }
 
-        if (this.state.durationYears !== "") {
+        if (durationYears !== "") {
             months += parseFloat(durationYears) * 12;
         }
 
@@ -43,27 +43,32 @@ const LoanDuration = (props) => {
 
     return (
         <>
-            <Form.Group controlId="formDurationYears">
-                <Form.Label>Years</Form.Label>
-                <Form.Control
-                    name="durationYears"
-                    type="number"
-                    value={durationYears}
-                    onChange={handleChangeYears}
-                    placeholder="years"
-                />
-            </Form.Group>
+            <Row>
+                <Form.Group controlId="formDurationYears">
+                    <Form.Label>Years</Form.Label>
+                    <Form.Control
+                        name="durationYears"
+                        type="number"
+                        value={durationYears}
+                        onChange={handleChangeYears}
+                        placeholder="years"
+                    />
+                </Form.Group>
+            </Row>
 
-            <Form.Group controlId="formDurationMonths">
-                <Form.Label>Months</Form.Label>
-                <Form.Control
-                    name="durationMonths"
-                    type="number"
-                    value={durationMonths}
-                    onChange={handleChangeMonth}
-                    placeholder="months"
-                />
-            </Form.Group>
+            <Row>
+                <Form.Group controlId="formDurationMonths">
+                    <Form.Label>Months</Form.Label>
+                    <Form.Control
+                        name="durationMonths"
+                        type="number"
+                        value={durationMonths}
+                        onChange={handleChangeMonth}
+                        placeholder="months"
+                    />
+                </Form.Group>
+            </Row>
+
         </>
     )
 }

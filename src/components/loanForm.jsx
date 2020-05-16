@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import CurrencyFormat from 'react-currency-format';
 import LoanDuration from './loanDuration';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
+import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import '../App.scss';
 
 const LoanForm = props => {
@@ -31,19 +30,6 @@ const LoanForm = props => {
 
   const handleReset = () => {
     props.resetCallback();
-
-    setState({
-      price: "",
-      duration: "",
-      interestRate: "",
-      flexiPayOption: false,
-      flexiPayDuration: "",
-      flexiPayRepayment: "",
-      isError: false,
-      durationKey: Math.random()
-    });
-
-
   };
 
   const handleChange = (event) => {
@@ -147,59 +133,67 @@ const LoanForm = props => {
   const isError = state.isError ? "show-fast" : "hide-fast";
 
   return (
-    <div>
+    <Container fluid="sm">
       <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="formPrice">
-          <Form.Label>Balance</Form.Label>
-          <Form.Control
-            name="price"
-            type="number"
-            value={state.price}
-            onChange={handleChange}
-            placeholder="outstanding balance" />
-        </Form.Group>
-
-        <Form.Group controlId="formInterestRate">
-          <Form.Label>Interest Rate</Form.Label>
-          <Form.Control
-            name="interestRate"
-            type="number"
-            value={state.interestRate}
-            onChange={handleChange}
-            placeholder="interest rate"
-          />
-        </Form.Group>
-
+        <Row>
+          <Form.Group controlId="formPrice">
+            <Form.Label>Balance</Form.Label>
+            <Form.Control
+              name="price"
+              type="number"
+              value={state.price}
+              onChange={handleChange}
+              placeholder="outstanding balance" />
+          </Form.Group>
+        </Row>
+        <Row>
+          <Form.Group controlId="formInterestRate">
+            <Form.Label>Interest Rate</Form.Label>
+            <Form.Control
+              name="interestRate"
+              type="number"
+              value={state.interestRate}
+              onChange={handleChange}
+              placeholder="interest rate"
+            />
+          </Form.Group>
+        </Row>
         <LoanDuration key={state.durationKey} parentCallback={formCallback} />
+        <Row>
+          <Form.Group controlId="formFlexiOption">
+            <Form.Label>Flexible Repayment</Form.Label>
+            <Form.Control
+              name="flexiPayOption"
+              type="checkbox"
+              value={state.flexiPayOption}
+              onChange={toggleChange} />
+          </Form.Group>
+        </Row>
 
-        <Form.Group controlId="formFlexiOption">
-          <Form.Label>Flexible Repayment</Form.Label>
-          <Form.Control
-            name="flexiPayOption"
-            type="checkbox"
-            value={state.flexiPayOption}
-            onChange={toggleChange} />
-        </Form.Group>
         {
           state.flexiPayOption
             ?
             <>
-              <Form.Group controlId="formflexiPayRepayment">
-                <Form.Label>Flex Repayment</Form.Label>
-                <Form.Control
-                  name="flexiPayRepayment"
-                  type="number"
-                  value={state.flexiPayRepayment}
-                  onChange={handleChange}
-                  placeholder="flexible repayment" />
-              </Form.Group>
-
+              <Row>
+                <Form.Group controlId="formflexiPayRepayment">
+                  <Form.Label>Flex Repayment</Form.Label>
+                  <Form.Control
+                    name="flexiPayRepayment"
+                    type="number"
+                    value={state.flexiPayRepayment}
+                    onChange={handleChange}
+                    placeholder="flexible repayment" />
+                </Form.Group>
+              </Row>
               <LoanDuration key={state.durationKey} parentCallback={formFlexiPayCallback} />
             </>
             : null
         }
-        <Button variant="primary" type="submit">Calculate Loan</Button>
-        <Button variant="secondary" type="button" onClick={handleReset}>Reset</Button>
+        <Row>
+          <Col md="auto"><Button variant="primary" type="submit">Calculate Loan</Button></Col>
+          <Col><Button variant="secondary" type="button" onClick={handleReset}>Reset</Button></Col>
+        </Row>
+
       </Form>
 
       <div>
@@ -207,9 +201,8 @@ const LoanForm = props => {
           <p>Please make sure you have non-empty, valid numbers in your form fields.</p>
         </div>
       </div>
-    </div>
+    </Container>
   )
-
 }
 
 export default LoanForm;
