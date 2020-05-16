@@ -1,14 +1,15 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
+import Form from 'react-bootstrap/Form'
 
 const LoanDuration = (props) => {
-    const [durationYears,setDurationYears] = useState("");
-    const [durationMonths,setDurationMonths] = useState("");
-    const [totalMonths,setTotalMonths] = useState("");
+    const [durationYears, setDurationYears] = useState("");
+    const [durationMonths, setDurationMonths] = useState("");
+    const [totalMonths, setTotalMonths] = useState("");
 
-    useEffect(()=>{
+    useEffect(() => {
         props.parentCallback(totalMonths);
-    },[totalMonths]);
-    
+    }, [totalMonths]);
+
     const handleChangeYears = (event) => {
         let months = 0;
 
@@ -42,29 +43,28 @@ const LoanDuration = (props) => {
 
     return (
         <>
-            <div className="input-container">
-                <label htmlFor="durationYears">Years</label>
-                <div className="form-container duration">
-                    <input
-                        name="durationYears"
-                        type="number"
-                        value={durationYears}
-                        onChange={handleChangeYears} />
-                </div>
-            </div>
+            <Form.Group controlId="formDurationYears">
+                <Form.Label>Years</Form.Label>
+                <Form.Control
+                    name="durationYears"
+                    type="number"
+                    value={durationYears}
+                    onChange={handleChangeYears}
+                    placeholder="years"
+                />
+            </Form.Group>
 
-            <div className="input-container">
-                <label htmlFor="durationMonths">Months</label>
-                <div className="form-container duration">
-                    <input
-                        name="durationMonths"
-                        type="number"
-                        value={durationMonths}
-                        onChange={handleChangeMonth} />
-                </div>
-            </div>
+            <Form.Group controlId="formDurationMonths">
+                <Form.Label>Months</Form.Label>
+                <Form.Control
+                    name="durationMonths"
+                    type="number"
+                    value={durationMonths}
+                    onChange={handleChangeMonth}
+                    placeholder="months"
+                />
+            </Form.Group>
         </>
     )
-
 }
 export default LoanDuration;
