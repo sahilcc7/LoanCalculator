@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import LoanForm from './loanForm';
 import LoanResults from './loanResults';
-import FlexLoanResults from './flexLoanResults';
 import LoanAmortization from './loanAmortization';
 import { Container } from 'react-bootstrap';
 import { SetLoanResultsWithFlex, SetLoanResults } from './Calculator'
