@@ -4,7 +4,7 @@ import LoanResults from './loanResults';
 import FlexLoanResults from './flexLoanResults';
 import LoanAmortization from './loanAmortization';
 import { Container } from 'react-bootstrap';
-import Calculator from './Calculator'
+import {SetLoanResultsWithFlex,SetLoanResults} from './Calculator'
 
 const LoanCalculator = props => {
   const [formKey, setFormKey] = useState(Math.random);
@@ -41,18 +41,17 @@ const LoanCalculator = props => {
 
   const [flexiOption, setFlexiOption] = useState(false);
 
-/*   useEffect(() => {
-    displayResults();
-  }, [formValue]); */
 
   const displayResults = () => {
     if (formValue.isError !== false) return;
 
     if (flexiOption === true) {
-      setLoanResultsWithFlex();
+      SetLoanResultsWithFlex(formValue);
     }
     else {
-      setLoanResults();
+      let calcResults = SetLoanResults(formValue);
+      setResults(calcResults.Results);
+      setAmortization(calcResults.Amortization);
     }
   };
 
@@ -86,70 +85,6 @@ const LoanCalculator = props => {
     return total
   };
 
-  
-
-  const setLoanResults = () => {
-    /**
-    * Sets the state of the Loan Results
-    * @return {function} setState()
-    */
-
-    const loanResults = Calculator.calcLoanResults(formValue);
-    const balance = formValue.price;
-    const monthlyPayment = loanResults.monthlyPayment;
-    let totalInterest = loanResults.totalInterest;
-    const totalPrincipal = loanResults.totalPrincipal;
-    let totalLoanAmt = loanResults.totalLoanAmt;
-    const duration = formValue.duration;
-
-    let amortizationResults = Calculator.calcAmortizationResults(totalPrincipal, duration, monthlyPayment);
-    let results = [];
-    results.push(
-      {
-        "Label": "Balance",
-        "Value": balance
-      }
-    );
-
-    results.push(
-      {
-        "Label": "Number of repayments",
-        "Value": duration
-      }
-    );
-
-    results.push(
-      {
-        "Label": "Monthly repayment",
-        "Value": monthlyPayment
-      }
-    );
-
-    results.push(
-      {
-        "Label": "Total amount payable",
-        "Value": parseFloat(totalLoanAmt).toFixed(2)
-      }
-    );
-
-    results.push(
-      {
-        "Label": "Total interest payable",
-        "Value": parseFloat(totalInterest).toFixed(2)
-      }
-    );
-
-    setResults(results);
-
-    setAmortization({
-      resultsArray: amortizationResults,
-      isHidden: false
-    });
-
-  };
-
-  
-  
 
   const toggleFlexiPayCallback = (flexiOption) => {
     setFlexiOption(flexiOption);
