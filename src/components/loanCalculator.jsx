@@ -16,36 +16,18 @@ const LoanCalculator = props => {
     flexiPayDuration: ""
   });
 
+  const [flexiOption, setFlexiOption] = useState(false);
   const [results, setResults] = useState([]);
-
-  const [flexResults, setFlexResults] = useState({
-    monthlyPaymentBefore: "0",
-    monthlyPaymentAfter: "0",
-    lastPayment: "0",
-    balanceBefore: "0",
-    balanceAfter: "0",
-    numberOfFlexibleRepayments: "0",
-    numberOfRepaymentsAfter: "0",
-    totalNumberOfRepayments: "0",
-    totalInterest: "0",
-    totalLoanAmt: "0",
-    totalAdditionalAmountPayable: "0"
-  });
-
   const [amortization, setAmortization] = useState({
     resultsArray: [],
     totalInterestPaid: "",
     isHidden: true
   });
 
-  const [flexiOption, setFlexiOption] = useState(false);
-
-
   const displayResults = () => {
     if (formValue.isError !== false) return;
 
     let calcResults = flexiOption === true ? SetLoanResultsWithFlex(formValue) : SetLoanResults(formValue);
-
     setResults(calcResults.Results);
     setAmortization(calcResults.Amortization);
   };
@@ -58,18 +40,14 @@ const LoanCalculator = props => {
       flexiPayRepayment: "",
       flexiPayDuration: ""
     });
-
+    setFlexiOption(false);
+    setFormKey(Math.random);
     setResults([]);
-
     setAmortization({
       resultsArray: [],
       totalInterestPaid: "",
       isHidden: true
     });
-
-    setFlexiOption(false);
-
-    setFormKey(Math.random);
   };
 
   const toggleFlexiPayCallback = (flexiOption) => {
@@ -87,7 +65,6 @@ const LoanCalculator = props => {
     setFormValues(formValues);
   };
 
-
   return (
     <div>
       <Container key={formKey}>
@@ -101,7 +78,6 @@ const LoanCalculator = props => {
       </Container>
     </div>
   );
-
 }
 
 export default LoanCalculator;
