@@ -20,6 +20,10 @@ const LoanForm = props => {
     props.toggleFlexiPayCallback(state.flexiPayOption)
   }, [state.flexiPayOption]);
 
+  useEffect(() => {
+    sendParentFormValues();
+  },[state])
+
   const sendParentFormValues = () => {
     /**
     * Sends state values to Parent Callback function
@@ -105,7 +109,7 @@ const LoanForm = props => {
       triggerErrorMsg();
     } else {
       hideErrorMsg();
-      sendParentFormValues();
+      props.submitCallback();
     }
   };
 
