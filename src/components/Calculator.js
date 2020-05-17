@@ -1,3 +1,11 @@
+const getSum = (array, prop) => {
+  var total = 0
+  for (var i = 0, _len = array.length; i < _len; i++) {
+    total += parseFloat(array[i][prop]);
+  }
+  return total
+};
+
 
 const calcTotalPrincipal = (totalLoanAmt, totalInterest) => {
   /**
@@ -40,7 +48,7 @@ const calcTotalLoanAmt = (numMonths, monthlyPayment) => {
   return (numMonths * monthlyPayment).toFixed(2);
 };
 
-const CalcLoanResults = (formValue) =>{
+const calcLoanResults = (formValue) =>{
   /**
   * Parent function that calls the calcTotal functions to get the 
   * results from the loan form fields.
@@ -182,7 +190,7 @@ const SetLoanResults = (formValue) => {
   * @return {function} setState()
   */
 
-  const loanResults = CalcLoanResults(formValue);
+  const loanResults = calcLoanResults(formValue);
   const balance = formValue.price;
   const monthlyPayment = loanResults.monthlyPayment;
   let totalInterest = loanResults.totalInterest;
@@ -259,22 +267,82 @@ const SetLoanResultsWithFlex = (formValue) => {
   let lastAmortization = amortizationResults.slice(-1)[0];
   let totalAdditionalAmountPayable = totalLoanAmt - loanResults.totalLoanAmt;
 
-  let results = {
-    monthlyPaymentBefore: loanResults.monthlyPayment,
-    monthlyPaymentAfter: AmmortizationAfterFlexi.monthlyPayment,
-    lastPayment: lastAmortization.monthlyPayment,
-    balanceBefore: totalPrincipal,
-    balanceAfter: LastFlexiAmmortization.endingPrincipal,
-    numberOfFlexibleRepayments: flexiPayDuration,
-    numberOfRepaymentsAfter: amortizationResults.length - flexiPayDuration,
-    totalNumberOfRepayments: amortizationResults.length,
-    totalInterest: (totalInterest + AdditionalLoanBalance).toFixed(2),
-    totalLoanAmt: totalLoanAmt.toFixed(2),
-    totalAdditionalAmountPayable: parseFloat(totalAdditionalAmountPayable).toFixed(2)
-  };
+  let results = [];
+  results.push(
+    {
+      "Label": "Repayment before:",
+      "Value": loanResults.monthlyPayment
+    }
+  );
+
+  results.push(
+    {
+      "Label": "Repayment after:",
+      "Value": AmmortizationAfterFlexi.monthlyPayment
+    }
+  );
+
+  results.push(
+    {
+      "Label": "Last payment:",
+      "Value": lastAmortization.monthlyPayment
+    }
+  );
+
+  results.push(
+    {
+      "Label": "Number of flexible repayments::",
+      "Value": parseFloat(totalPrincipal).toFixed(2)
+    }
+  );
+
+  results.push(
+    {
+      "Label": "Balance after: ",
+      "Value": parseFloat(LastFlexiAmmortization.endingPrincipal).toFixed(2)
+    }
+  );
+
+  results.push(
+    {
+      "Label": "Number of flexible repayments:: ",
+      "Value": flexiPayDuration
+    }
+  );
+
+  results.push(
+    {
+      "Label": "Number of repayments after: ",
+      "Value": amortizationResults.length - flexiPayDuration
+    }
+  );
+  results.push(
+    {
+      "Label": "Total number of repayments: ",
+      "Value": amortizationResults.length
+    }
+  );
+  results.push(
+    {
+      "Label": "Total interest payable: ",
+      "Value": (totalInterest + AdditionalLoanBalance).toFixed(2)
+    }
+  );
+  results.push(
+    {
+      "Label": "Total amount payable: ",
+      "Value": parseFloat(totalLoanAmt).toFixed(2)
+    }
+  );
+  results.push(
+    {
+      "Label": "Total additional amount payable: ",
+      "Value": parseFloat(totalAdditionalAmountPayable).toFixed(2)
+    }
+  );
 
   return {
-    Amortization :{
+    Amortization : {
       resultsArray: amortizationResults,
       isHidden: false
     },

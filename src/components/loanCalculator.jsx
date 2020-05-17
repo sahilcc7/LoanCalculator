@@ -4,7 +4,7 @@ import LoanResults from './loanResults';
 import FlexLoanResults from './flexLoanResults';
 import LoanAmortization from './loanAmortization';
 import { Container } from 'react-bootstrap';
-import {SetLoanResultsWithFlex,SetLoanResults} from './Calculator'
+import { SetLoanResultsWithFlex, SetLoanResults } from './Calculator'
 
 const LoanCalculator = props => {
   const [formKey, setFormKey] = useState(Math.random);
@@ -45,14 +45,10 @@ const LoanCalculator = props => {
   const displayResults = () => {
     if (formValue.isError !== false) return;
 
-    if (flexiOption === true) {
-      SetLoanResultsWithFlex(formValue);
-    }
-    else {
-      let calcResults = SetLoanResults(formValue);
-      setResults(calcResults.Results);
-      setAmortization(calcResults.Amortization);
-    }
+    let calcResults = flexiOption === true ? SetLoanResultsWithFlex(formValue) : SetLoanResults(formValue);
+
+    setResults(calcResults.Results);
+    setAmortization(calcResults.Amortization);
   };
 
   const resetState = () => {
@@ -76,15 +72,6 @@ const LoanCalculator = props => {
 
     setFormKey(Math.random);
   };
-
-  const getSum = (array, prop) => {
-    var total = 0
-    for (var i = 0, _len = array.length; i < _len; i++) {
-      total += parseFloat(array[i][prop]);
-    }
-    return total
-  };
-
 
   const toggleFlexiPayCallback = (flexiOption) => {
     setFlexiOption(flexiOption);
