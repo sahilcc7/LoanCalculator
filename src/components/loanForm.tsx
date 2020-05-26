@@ -1,26 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import CurrencyFormat from 'react-currency-format';
+import * as React from "react";
 import LoanDuration from './loanDuration';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import '../App.scss';
 
 const LoanForm = props => {
-  const [state, setState] = useState({
-    price: "",
-    duration: "",
-    interestRate: "",
+  const [state, setState] = React.useState({
+    price: 0,
+    duration: 0,
+    interestRate: 0,
     flexiPayOption: false,
-    flexiPayDuration: "",
-    flexiPayRepayment: "",
+    flexiPayDuration: 0,
+    flexiPayRepayment: 0,
     isError: false,
     durationKey: Math.random()
   });
 
-  useEffect(() => {
+  React.useEffect(() => {
     props.toggleFlexiPayCallback(state.flexiPayOption)
   }, [state.flexiPayOption]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     sendParentFormValues();
   },[state])
 
@@ -59,11 +58,11 @@ const LoanForm = props => {
     * @return {bool}
     */
     if (
-      state.price === "" ||
-      state.duration === "" ||
-      state.interestRate === "" ||
+      state.price === 0 ||
+      state.duration === 0 ||
+      state.interestRate === 0 ||
       state.duration < 1 ||
-      (state.flexiPayOption === true && (state.flexiPayRepayment === "" || state.flexiPayDuration === "")) ||
+      (state.flexiPayOption === true && (state.flexiPayRepayment === 0 && state.flexiPayDuration === 0)) ||
       state.interestRate < 0.01
     ) {
       return true;
@@ -169,7 +168,7 @@ const LoanForm = props => {
             <Form.Control
               name="flexiPayOption"
               type="checkbox"
-              value={state.flexiPayOption}
+              value={String(state.flexiPayOption)}
               onChange={toggleChange} />
           </Form.Group>
         </Row>

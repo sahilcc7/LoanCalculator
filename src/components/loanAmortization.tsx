@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from "react";
 import CurrencyFormat from 'react-currency-format';
 import { Container, Table } from 'react-bootstrap';
 import '../App.scss';

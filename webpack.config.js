@@ -1,75 +1,76 @@
-const path = require('path');
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+var HtmlWebpackPlugin = require("html-webpack-plugin");
+var MiniCssExtractPlugin = require("mini-css-extract-plugin");
+var webpack = require("webpack");
+var path = require("path");
 
-// HtmlWebpackPlugin is used to inject our created bundles into this html file so // we need to create it.
-const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
-    template: './src/index.html',
-    filename: 'index.html',
-    inject: 'body',
-});
+var basePath = __dirname;
 
 module.exports = {
-    target: 'web', 
-    devServer: {
-        port: 3000,
-        contentBase: './dist',
-    },
-    entry: {
-        app: ['./src/App.jsx'],
-        vendor: ['react', 'react-dom']
-    },
-    output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: 'js/[name].bundle.js'
-    },
-    devtool: 'source-map',
-    resolve: {
-        extensions: ['.js', '.jsx']
-    },
-    module: {
-        rules: [
-            {
-                test: /\.(js|jsx)$/,
-                exclude: /(node_modules)/,
-                use: ['babel-loader'], // we use this to transpile es6 code on the web
-              },
-              {
-                test: /\.css$/,
-                use: [
-                  MiniCssExtractPlugin.loader,
-                  "css-loader", "postcss-loader",
-                  ],
-                },
-                {
-                    test: /\.scss$/,
-                    use: [
-                        {
-                            loader: 'style-loader'
-                        },
-                        {
-                            loader: 'css-loader'
-                        },
-                        {
-                            loader: 'sass-loader'
-                        }
-                    ]
-                },
+  context: path.join(basePath, "src"),
+  resolve: {
+    extensions: [".js", ".ts", ".tsx"]
+  },
+  entry: ["@babel/polyfill", "./index.tsx"],
+  output: {
+    path: path.join(basePath, "dist"),
+    filename: "bundle.js"
+  },
+  devtool: "source-map",
+  devServer: {
+    contentBase: "./dist", // Content base
+    inline: true, // Enable watch and live reload
+    host: "localhost",
+    port: 8080,
+    stats: "errors-only"
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(ts|tsx)$/,
+        exclude: /node_modules/,
+        loader: "awesome-typescript-loader",
+        options: {
+          useBabel: true,
+          babelCore: "@babel/core" // needed for Babel v7
+        }
+      },
+      {
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, "css-loader"]
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          {
+            loader: 'style-loader'
+          },
+          {
+            loader: 'css-loader'
+          },
+          {
+            loader: 'sass-loader'
+          }
         ]
-    },
-    plugins: [
-        new MiniCssExtractPlugin({
-            filename: "styles.css",
-            chunkFilename: "styles.css"
-        }),
-        HtmlWebpackPluginConfig,
-        new webpack.NoEmitOnErrorsPlugin(),
-        new webpack.DefinePlugin({
-            'process.env': {
-               NODE_ENV: JSON.stringify('production') // <--- this set everything to use production.
-            },
-          }),
-    ],
-    mode: 'development',
-}
+      },
+      {
+        test: /\.(png|jpg|gif|svg)$/,
+        loader: "file-loader",
+        options: {
+          name: "assets/img/[name].[ext]?[hash]"
+        }
+      }
+    ]
+  },
+  plugins: [
+    //Generate index.html in /dist => https://github.com/ampedandwired/html-webpack-plugin
+    new HtmlWebpackPlugin({
+      filename: "index.html", //Name of file in ./dist/
+      template: "index.html", //Name of template in ./src
+      hash: true
+    }),
+    new MiniCssExtractPlugin({
+      filename: "[name].css",
+      chunkFilename: "[id].css"
+    })
+  ]
+};

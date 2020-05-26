@@ -1,5 +1,4 @@
-import React from 'react';
-import CurrencyFormat from 'react-currency-format';
+import * as React from "react";
 import { Container, Row, Col, } from 'react-bootstrap';
 
 function LoanResults(props) {

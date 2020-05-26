@@ -1,45 +1,51 @@
-import React, { useState, useEffect } from 'react';
+import * as React from "react";
 import { Form, Row } from 'react-bootstrap'
 
-const LoanDuration = (props) => {
-    const [durationYears, setDurationYears] = useState("");
-    const [durationMonths, setDurationMonths] = useState("");
-    const [totalMonths, setTotalMonths] = useState("");
+interface Props {
+    parentCallback: (months: number) => void;
+}
 
-    useEffect(() => {
+const LoanDuration = (props: Props) => {
+    const [durationYears, setDurationYears] = React.useState(0);
+    const [durationMonths, setDurationMonths] = React.useState(0);
+    const [totalMonths, setTotalMonths] = React.useState(0);
+
+    React.useEffect(() => {
         props.parentCallback(totalMonths);
     }, [totalMonths]);
 
-    const handleChangeYears = (event) => {
-        let months = 0;
+    const convertYearsToMonths: (years: number) => number =
+    function(x) { return x * 12; };
+
+
+    const handleChangeYears = (event: React.ChangeEvent<HTMLInputElement>) => {
+        let months : number  = 0;
 
         if (event.target.value !== "") {
-            months = parseFloat(event.target.value) * 12;
+            months = convertYearsToMonths(parseFloat(event.target.value));
         }
 
-        if (durationMonths !== "") {
-            months += parseFloat(durationMonths);
-        }
+        months += durationMonths;
 
-        setDurationYears(event.target.value);
+        setDurationYears(parseFloat(event.target.value));
         setTotalMonths(months);
     };
 
 
-    const handleChangeMonth = (event) => {
-        let months = 0;
+    const handleChangeMonth = (event: React.ChangeEvent<HTMLInputElement>) => {
+        let months : number = 0;
 
         if (event.target.value !== "") {
             months = parseFloat(event.target.value);
         }
 
-        if (durationYears !== "") {
-            months += parseFloat(durationYears) * 12;
-        }
+        months += convertYearsToMonths(durationYears);
 
-        setDurationMonths(event.target.value);
+        setDurationMonths(parseFloat(event.target.value));
         setTotalMonths(months);
     };
+
+
 
     return (
         <>

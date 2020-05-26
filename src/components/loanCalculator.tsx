@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import * as React from "react";
 import LoanForm from './loanForm';
 import LoanResults from './loanResults';
 import LoanAmortization from './loanAmortization';
@@ -6,26 +6,27 @@ import { Container } from 'react-bootstrap';
 import { SetLoanResultsWithFlex, SetLoanResults } from './Calculator'
 
 const LoanCalculator = props => {
-  const [formKey, setFormKey] = useState(Math.random);
+  const [formKey, setFormKey] = React.useState(Math.random);
 
-  const [formValue, setFormValues] = useState({
-    price: "",
-    duration: "",
-    interestRate: "",
-    flexiPayRepayment: "",
-    flexiPayDuration: ""
+  const [formValue, setFormValues] = React.useState({
+    price: 0,
+    duration: 0,
+    interestRate: 0,
+    flexiPayRepayment: 0,
+    flexiPayDuration: 0,
+    isError:false
   });
 
-  const [flexiOption, setFlexiOption] = useState(false);
-  const [results, setResults] = useState([]);
-  const [amortization, setAmortization] = useState({
+  const [flexiOption, setFlexiOption] = React.useState(false);
+  const [results, setResults] = React.useState([]);
+  const [amortization, setAmortization] = React.useState({
     resultsArray: [],
     totalInterestPaid: "",
     isHidden: true
   });
 
   const displayResults = () => {
-    if (formValue.isError !== false) return;
+    if (formValue.isError === true) return;
 
     let calcResults = flexiOption === true ? SetLoanResultsWithFlex(formValue) : SetLoanResults(formValue);
     setResults(calcResults.Results);
@@ -34,11 +35,12 @@ const LoanCalculator = props => {
 
   const resetState = () => {
     setFormValues({
-      price: "",
-      duration: "",
-      interestRate: "",
-      flexiPayRepayment: "",
-      flexiPayDuration: ""
+      price: 0,
+      duration: 0,
+      interestRate: 0,
+      flexiPayRepayment: 0,
+      flexiPayDuration: 0,
+      isError:false
     });
     setFlexiOption(false);
     setFormKey(Math.random);
